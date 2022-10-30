@@ -11,4 +11,12 @@ output:
 
 ## Project thoughts
 
-I am interested in exploring data related to voters in historically landslide counties or states. More specifically, the data surrounding those registered to parties other than the dominant regional party, and the statistics surrounding voter turnout, third party vote share, and an evaluation of change over time. This can be broken up deeper into demographic categories like gender, education, ethnicities, and more. 
+I am interested in exploring data related to voters in historically landslide counties or states. More specifically, the data surrounding those registered to parties other than the dominant regional party, and the statistics surrounding voter turnout, third party vote share, and an evaluation of change over time. This can be broken up deeper into demographic categories like gender, education, ethnicity, and more. 
+
+## Update Two
+
+I have changed my plan a bit, I now would like to focus more on the breakdown of rural voters and race/education. I have found a data set, which is read in below, that has comprehensive percentage breakdowns of voting demographics from 2016-2018.
+
+```{r}
+voting <- read.csv("2016-2018 Validated Voter Preference.csv")
+```
