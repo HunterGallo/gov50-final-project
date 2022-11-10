@@ -34,14 +34,15 @@ bama_polls <- polls |>
 bama_urban <- voting |>
   filter(state == 'Alabama')
 
-ggplot(data = bama_polls, aes(x = pct_estimate))+
+alplot1 <- ggplot(data = bama_polls, aes(x = pct_estimate))+
   geom_histogram(aes(y= ..density..))+
   labs(x = "Alabama Poll Results for Trump")
+alplot1
 
-ggplot(data = bama_urban, aes(x = urbanindex))+
+alplot2 <- ggplot(data = bama_urban, aes(x = urbanindex))+
   geom_histogram(aes(y= ..density..)) +
   labs(x = "Urban Index of Regions in Alabama")
-
+alplot2
 ```
 These plots show how the urban index of the state of Alamaba relate to the polling results for Donald Trump leading up to the 2020 election. 
 
@@ -53,13 +54,15 @@ ny_polls <- polls |>
 ny_urban <- voting |>
   filter(state == 'New York')
 
-ggplot(data = ny_polls, aes(x = pct_estimate))+
+nyplot1 <- ggplot(data = ny_polls, aes(x = pct_estimate))+
   geom_histogram(aes(y= ..density..))+
   labs(x = "New York Poll Results for Trump")
+nyplot1
 
-ggplot(data = ny_urban, aes(x = urbanindex))+
+nyplot2 <- ggplot(data = ny_urban, aes(x = urbanindex))+
   geom_histogram(aes(y= ..density..)) +
   labs(x = "Urban Index of Regions in New York")
+nyplot2
 
 ```
 
