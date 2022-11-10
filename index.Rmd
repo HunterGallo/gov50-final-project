@@ -15,8 +15,52 @@ I am interested in exploring data related to voters in historically landslide co
 
 ## Update Two
 
-I have changed my plan a bit, I now would like to focus more on the breakdown of rural voters and race/education. I have found a data set, which is read in below, that has comprehensive percentage breakdowns of voting demographics from 2016-2018.
+I have changed my plan a bit, I now would like to focus more on the breakdown of rural and urban voters in the 2020 election. More specifically, the ways in which rural and urban differences do and do not dictate the way a region votes, compared with how the population of a region (abstract of urbanization index as defined by FiveThirtyEight in this case). I have found a pair of data sets, which are read in below, that has comprehensive breakdowns of each state's urbanization, and the poll results in the 2020 presidential election. 
 
 ```{r}
-voting <- read.csv("2016-2018 Validated Voter Preference.csv")
+voting <- read.csv("urbanization-census-tract.csv")
+polls <- read.csv("pres_polls_2020.csv")
 ```
+
+## Update Three 
+
+```{r}
+library(tidyverse)
+
+bama_polls <- polls |>
+  filter(state == 'Alabama',
+         candidate_name == 'Donald Trump')
+
+bama_urban <- voting |>
+  filter(state == 'Alabama')
+
+ggplot(data = bama_polls, aes(x = pct_estimate))+
+  geom_histogram(aes(y= ..density..))+
+  labs(x = "Alabama Poll Results for Trump")
+
+ggplot(data = bama_urban, aes(x = urbanindex))+
+  geom_histogram(aes(y= ..density..)) +
+  labs(x = "Urban Index of Regions in Alabama")
+
+```
+These plots show how the urban index of the state of Alamaba relate to the polling results for Donald Trump leading up to the 2020 election. 
+
+```{r}
+ny_polls <- polls |>
+  filter(state == 'New York',
+         candidate_name == 'Donald Trump')
+
+ny_urban <- voting |>
+  filter(state == 'New York')
+
+ggplot(data = ny_polls, aes(x = pct_estimate))+
+  geom_histogram(aes(y= ..density..))+
+  labs(x = "New York Poll Results for Trump")
+
+ggplot(data = ny_urban, aes(x = urbanindex))+
+  geom_histogram(aes(y= ..density..)) +
+  labs(x = "Urban Index of Regions in New York")
+
+```
+
+Now, in a case of a more urban (on average) state like New York, we can see how the polling numbers drop for Trump. 
