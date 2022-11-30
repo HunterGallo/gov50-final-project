@@ -1,7 +1,7 @@
 ---
 title: "Gov 50 Final Project"
 author: "Hunter Gallo"
-description: "My Final Project"
+description: "My Final Project: Rural and Red?"
 output:
   distill::distill_article:
     self_contained: false
@@ -9,20 +9,20 @@ output:
 
 
 
-## Project thoughts
+## Introduction
 
-I am interested in exploring data related to voters in historically landslide counties or states. More specifically, the data surrounding those registered to parties other than the dominant regional party, and the statistics surrounding voter turnout, third party vote share, and an evaluation of change over time. This can be broken up deeper into demographic categories like gender, education, ethnicity, and more. 
+When looking at an electoral map of the United States after a major election, it is often easy for average people and political pundits alike to draw inferences and even conclusions about the types of voters represented by red and blue, based on the regions they come from. However, as a voter who lives in a decidedly blue state (New Jersey) but simultaneously one of the most red counties in America (Sussex County, in rural northwest NJ), I was drawn to the idea of how one breaks down the regional and geographic factors that go into one's voting preferences. 
 
-## Update Two
-
-I have changed my plan a bit, I now would like to focus more on the breakdown of rural and urban voters in the 2020 election. More specifically, the ways in which rural and urban differences do and do not dictate the way a region votes, compared with how the population of a region (abstract of urbanization index as defined by FiveThirtyEight in this case). I have found a pair of data sets, which are read in below, that has comprehensive breakdowns of each state's urbanization, and the poll results in the 2020 presidential election. 
+This project will focus on the breakdown of rural and urban voters in the 2020 election. More specifically, the ways in which rural and urban differences do and do not dictate the way a region votes, compared with how the population of a region (abstract of urbanization index as defined by FiveThirtyEight in this case). I have found a pair of data sets, which are read in below, that has comprehensive breakdowns of each state's urbanization, and the poll results in the 2020 presidential election. 
 
 ```{r}
 voting <- read.csv("urbanization-census-tract.csv")
 polls <- read.csv("pres_polls_2020.csv")
 ```
 
-## Update Three 
+## Examples
+
+Firstly, the data in question comes from two seperate sets. The first of which, entitled "voting," is a FiveThirtyEight-created data set which analyzes, among other things, the "Urbanization Index" of individual regions in each state. This is calculated through a comparison of the population index of each region and the radial area taken up geographically by the region, determining how densely population each region is. The second, read in as "polls," is another FiveThirtyEight product, which combines numerous polls from different dates and polling sources for the 2020 Presidential election. Below are some examples of the comparison between the urbanization index and polling results for Donald Trump. 
 
 ```{r}
 library(tidyverse)
@@ -67,3 +67,60 @@ nyplot2
 ```
 
 Now, in a case of a more urban (on average) state like New York, we can see how the polling numbers drop for Trump. 
+
+## Research and Results
+
+We begin by finding the average Urbanization Index across the "voting" data:
+
+```{r}
+voting |>
+  summarize(Mean_Urban = mean(urbanindex),
+            Median_Urban = median(urbanindex),
+            SD_Urban = sd(urbanindex))
+
+```
+
+Since the mean and median are close together, we can confidently use the mean to mark the average level of urbanization among the analyzed regions.
+
+We can now create a new variable that separates the regions in above and below this level:
+
+```{r}
+voting <- voting |>
+  mutate(region_type = if_else(urbanindex >= 11.042, "Urban", "Rural"))
+```
+
+And another new variable which determines if more than half of the voters in a state indicated they would vote red, using some constraints to make the data more manageable for this experiment:
+
+```{r}
+polls_red <- polls |>
+  filter(candidate_name == "Donald Trump",
+         modeldate == "11/3/2020") |>
+  mutate(red_state = if_else(pct_estimate >= 50.01, "Red", "Blue"))
+
+table(polls_red$red_state)
+```
+As we can see, there are 19 red states according to this data. We will now create a new variable in the "voting" data set which organizes the states based on if they would be in the Red or Blue category in the "polls" data set.
+
+```{r}
+voting <- voting |>
+  mutate(red_result = if_else(state == "Wyoming" | state == "West Virginia" | state == "Utah" | state == "Tennessee" | state == "South Dakota" | state == "South Carolina" | state == "Oklahoma" | state == "North Dakota" | state == "Nebraska" | state == "Missouri" | state == "Mississippi" | state == "Louisiana" | state == "Kentucky" | state == "Kansas" | state == "Indiana" | state == "Idaho" | state == "Arkansas" | state == "Alaska" | state == "Alabama", "Red", "Blue"))
+
+
+```
+
+
+Now, we can run a multiple regression to determine how the urbanization levels and population (abstract of area) might impact if a state is red or not. 
+
+
+```{r}
+regression_1 <- lm(urbanindex ~ red_result + population, data = voting)
+
+regression_1 |>
+ broom::tidy() |>
+  select(term, estimate) |>  
+  knitr::kable(digits = 2)
+
+
+
+```
+On average, according to these results, it appears that the intercept of 11.19 goes down almost a whole standard deviation when the result of Red or Blue state is made Red. This would indicate that there is a considerable positive impact on the likelihood of a state voting red if the state has a higher percentage of urban areas. It also appears that the population alone does not have much of an impact.  
