@@ -13,7 +13,7 @@ output:
 
 When looking at an electoral map of the United States after a major election, it is often easy for average people and political pundits alike to draw inferences and even conclusions about the types of voters represented by red and blue, based on the regions they come from. However, as a voter who lives in a decidedly blue state (New Jersey) but simultaneously one of the most red counties in America (Sussex County, in rural northwest NJ), I was drawn to the idea of how one breaks down the regional and geographic factors that go into one's voting preferences. 
 
-This project will focus on the breakdown of rural and urban voters in the 2020 election. More specifically, the ways in which rural and urban differences do and do not dictate the way a region votes, compared with how the population of a region (abstract of urbanization index as defined by FiveThirtyEight in this case). I have found a pair of data sets, which are read in below, that has comprehensive breakdowns of each state's urbanization, and the poll results in the 2020 presidential election. 
+This project will focus on the breakdown of rural and urban voters in the 2020 election. More specifically, the ways in which rural and urban differences do and do not dictate the way a region votes, compared with the population of a region (abstract of urbanization index as defined by FiveThirtyEight in this case). I have found a pair of data sets, which are read in below, that has comprehensive breakdowns of each state's urbanization, and the poll results in the 2020 presidential election. 
 
 ```{r}
 voting <- read.csv("urbanization-census-tract.csv")
@@ -36,12 +36,12 @@ bama_urban <- voting |>
 
 alplot1 <- ggplot(data = bama_polls, aes(x = pct_estimate))+
   geom_histogram(aes(y= ..density..))+
-  labs(x = "Alabama Poll Results for Trump")
+  labs(x = "Alabama Poll Results for Trump (Percentage)")
 alplot1
 
 alplot2 <- ggplot(data = bama_urban, aes(x = urbanindex))+
   geom_histogram(aes(y= ..density..)) +
-  labs(x = "Urban Index of Regions in Alabama")
+  labs(x = "Urban Index of Regions in Alabama", )
 alplot2
 ```
 These plots show how the urban index of the state of Alamaba relate to the polling results for Donald Trump leading up to the 2020 election. 
@@ -56,7 +56,7 @@ ny_urban <- voting |>
 
 nyplot1 <- ggplot(data = ny_polls, aes(x = pct_estimate))+
   geom_histogram(aes(y= ..density..))+
-  labs(x = "New York Poll Results for Trump")
+  labs(x = "New York Poll Results for Trump (Percentage)")
 nyplot1
 
 nyplot2 <- ggplot(data = ny_urban, aes(x = urbanindex))+
@@ -103,7 +103,11 @@ As we can see, there are 19 red states according to this data. We will now creat
 
 ```{r}
 voting <- voting |>
-  mutate(red_result = if_else(state == "Wyoming" | state == "West Virginia" | state == "Utah" | state == "Tennessee" | state == "South Dakota" | state == "South Carolina" | state == "Oklahoma" | state == "North Dakota" | state == "Nebraska" | state == "Missouri" | state == "Mississippi" | state == "Louisiana" | state == "Kentucky" | state == "Kansas" | state == "Indiana" | state == "Idaho" | state == "Arkansas" | state == "Alaska" | state == "Alabama", "Red", "Blue"))
+  mutate(red_result = if_else(state == "Wyoming" | state == "West Virginia" | state == "Utah" | state == "Tennessee" 
+| state == "South Dakota" | state == "South Carolina" | state == "Oklahoma" | state == "North Dakota" | state == "Nebraska" 
+| state == "Missouri" | state == "Mississippi" | state == "Louisiana" | state == "Kentucky" | state == "Kansas" 
+| state == "Indiana" | state == "Idaho" | state == "Arkansas" | state == "Alaska" | state == "Alabama",
+"Red", "Blue"))
 
 
 ```
@@ -123,4 +127,13 @@ regression_1 |>
 
 
 ```
-On average, according to these results, it appears that the intercept of 11.19 goes down almost a whole standard deviation when the result of Red or Blue state is made Red. This would indicate that there is a considerable positive impact on the likelihood of a state voting red if the state has a higher percentage of urban areas. It also appears that the population alone does not have much of an impact.  
+On average, according to these results, it appears that the intercept of 11.19 goes down almost a whole standard deviation when the result of Red or Blue state is made Red. This would indicate that there is a considerable positive impact on the likelihood of a state voting red if the state has a higher percentage of rural areas. It also appears that the population alone does not have much of an impact.  
+
+```{r}
+plot(regression_1)
+```
+
+
+## Conclusion and Extention
+
+Based on the interpretations of the data made above, it seems that the urbanization of a region has a higher impact on whether or not the region votes red than the simple population of the region. Extending this to other potential conclusions, it is reasonable to consider that this phenomenon is still true when polls are broken down further into counties; i.e., areas of even blue states that are more rural are also more likely to defy the way the state as a whole votes. In the nineteen states used in the above calculations of red and blue states, it seems that there are enough people who live in these areas of lower urbanization index to make the entire state turn red. While one can not say all rural voters are red, nor that being a rural voter is the only thing that makes a voter swing red, there is apparent evidence that there is a direct link between the two, and this can potentially be extrapolated to most if not any regional sample size in the United States. 
