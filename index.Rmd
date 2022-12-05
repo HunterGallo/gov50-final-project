@@ -134,6 +134,6 @@ plot(regression_1)
 ```
 
 
-## Conclusion and Extension
+## Conclusion and Extension 
 
 Based on the interpretations of the data made above, it seems that the urbanization of a region has a higher impact on whether or not the region votes red than the simple population of the region. Extending this to other potential conclusions, it is reasonable to consider that this phenomenon is still true when polls are broken down further into counties; i.e., areas of even blue states that are more rural are also more likely to defy the way the state as a whole votes. In the nineteen states used in the above calculations of red and blue states, it seems that there are enough people who live in these areas of lower urbanization index to make the entire state turn red. While one can not say all rural voters are red, nor that being a rural voter is the only thing that makes a voter swing red, there is apparent evidence that there is a direct link between the two, and this can potentially be extrapolated to most if not any regional sample size in the United States. 
